@@ -1,0 +1,14 @@
+{
+  "name": "reward",
+  "version": "1.0.0",
+  "main": "server.js",
+  "license": "MIT",
+  "devDependencies": {
+    "cucumber": "^3.2.0",
+    "mocha": "^4.0.1"
+  },
+  "dependencies": {
+    "neptunium": "aslakhellesoy/neptunium",
+    "uuid": "^3.1.0"
+  }
+}
