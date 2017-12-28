@@ -5,18 +5,17 @@ module.exports = class Account extends Entity {
     await this.trigger(AccountCreated, { externalId })
   }
 
-  async credit({ currency, amount }) {
-    await this.trigger(AccountCredited, { currency, amount })
+  async deposit({ transferId, currency, amount }) {
+    await this.trigger(AccountCredited, { transferId, currency, amount })
   }
 
-  async requestTransfer({ toAccountId, currency, amount }) {
+  async withdraw({ transferId, currency, amount }) {
     const balance = this._getBalance(currency)
-    if (balance < amount) throw new Error(`Insufficient funds: ${balance} < ${amount}`)
-    await this.trigger(TransferApproved, { toAccountId, currency, amount })
-  }
-
-  async executeTransfer({ fromAccountId, currency, amount }) {
-    await this.trigger(TransferExecuted, { fromAccountId, currency, amount })
+    if (balance < amount) {
+      await this.trigger(AccountDebitFailedDueToInsufficientFunds, { transferId, currency, amount })
+    } else {
+      await this.trigger(AccountDebited, { transferId, currency, amount })
+    }
   }
 
   _getBalance(currency) {
@@ -35,14 +34,9 @@ module.exports = class Account extends Entity {
     this._balances.set(currency, balance + amount)
   }
 
-  onTransferApproved({ currency, amount }) {
+  onAccountDebited({ currency, amount }) {
     const balance = this._balances.get(currency)
     this._balances.set(currency, balance - amount)
-  }
-
-  onTransferExecuted({ currency, amount }) {
-    const balance = this._balances.get(currency)
-    this._balances.set(currency, balance + amount)
   }
 }
 
@@ -57,24 +51,25 @@ class AccountCredited extends Event {
 }
 
 AccountCredited.properties = {
+  transferId: 'string',
   currency: 'string',
   amount: 'number'
 }
 
-class TransferApproved extends Event {
+class AccountDebited extends Event {
 }
 
-TransferApproved.properties = {
-  toAccountId: 'string',
+AccountDebited.properties = {
+  transferId: 'string',
   currency: 'string',
   amount: 'number'
 }
 
-class TransferExecuted extends Event {
+class AccountDebitFailedDueToInsufficientFunds extends Event {
 }
 
-TransferExecuted.properties = {
-  fromAccountId: 'string',
+AccountDebitFailedDueToInsufficientFunds.properties = {
+  transferId: 'string',
   currency: 'string',
   amount: 'number'
 }

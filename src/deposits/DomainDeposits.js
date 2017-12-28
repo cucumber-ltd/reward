@@ -1,5 +1,5 @@
 const ValueObject = require('value-object')
-const Account = require('../entities/Account')
+const Deposit = require('../entities/Deposit')
 
 module.exports = class DomainDeposits {
   constructor({ commandBus }) {
@@ -7,17 +7,6 @@ module.exports = class DomainDeposits {
   }
 
   async deposit({ accountId, currency, amount }) {
-    await this._commandBus.dispatchCommand(new Deposit({ accountId, currency, amount }))
-  }
-}
-
-class Deposit extends ValueObject.define({
-  accountId: 'string',
-  currency: 'string',
-  amount: 'number',
-}) {
-  static async process(repository, { accountId, currency, amount }) {
-    const account = await repository.load(Account, accountId)
-    await account.credit({ currency, amount })
+    await this._commandBus.dispatchCommand(new Deposit({ accountId, transferId: null, currency, amount }))
   }
 }

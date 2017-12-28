@@ -1,8 +1,9 @@
 const ValueObject = require('value-object')
-const Account = require('../entities/Account')
+const Withdraw = require('../entities/Withdraw')
+const Deposit = require('../entities/Deposit')
 
 module.exports = class TransferSaga {
-  static onTransferApproved(event) {
+  static onTransferRequested() {
     return true
   }
 
@@ -11,11 +12,24 @@ module.exports = class TransferSaga {
     this._end = end
   }
 
-  async onTransferApproved({ entityId: fromAccountId, toAccountId, currency, amount }) {
-    await this._commandBus.dispatchCommand(new ExecuteTransfer({ fromAccountId, toAccountId, currency, amount }))
+  async onTransferRequested({ entityId: transferId, fromAccountId, toAccountId, currency, amount }) {
+    this._transferId = transferId
+    this._toAccountId = toAccountId
+    await this._commandBus.dispatchCommand(new Withdraw({ accountId: fromAccountId, transferId, currency, amount }))
   }
 
-  async onTransferExecuted(event) {
+  async onAccountDebited({ transferId, currency, amount }) {
+    if (transferId !== this._transferId) return
+    await this._commandBus.dispatchCommand(new Deposit({ accountId: this._toAccountId, transferId, currency, amount }))
+  }
+
+  async onAccountCredited({ transferId }) {
+    if (transferId !== this._transferId) return
+    this._end()
+  }
+
+  async AccountDebitFailedDueToInsufficientFunds({ transferId }) {
+    if (transferId !== this._transferId) return
     this._end()
   }
 }

@@ -1,3 +1,4 @@
+const uuid = require('uuid/v4')
 const BaseTestAssembly = require('./BaseTestAssembly')
 
 module.exports = class DomainTestAssembly extends BaseTestAssembly {
@@ -23,10 +24,11 @@ class Actor {
     this._rewardQueries = rewardQueries
   }
 
-  async donate({ amount, currency, gitHubIssue }) {
+  async transfer({ amount, currency, gitHubIssue }) {
     const fromAccountId = this._id(this._gitHubUser)
     const toAccountId = this._id(gitHubIssue)
-    await this._transfers.requestTransfer({ fromAccountId, toAccountId, currency, amount })
+    const transferId = uuid()
+    await this._transfers.requestTransfer({ transferId, fromAccountId, toAccountId, currency, amount })
   }
 
   async getBalance({ currency, gitHubIssue }) {

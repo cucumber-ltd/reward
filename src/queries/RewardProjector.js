@@ -26,7 +26,7 @@ module.exports = class RewardProjector {
     await this._rewardStore.updateAccountInfo({ accountInfo })
   }
 
-  async onTransferApproved({ entityId: accountId, currency, amount }) {
+  async onAccountDebited({ entityId: accountId, currency, amount }) {
     const accountInfo = await this._rewardStore.getQueries().getAccountInfo(accountId)
     if (!accountInfo.currencies[currency]) {
       accountInfo.currencies[currency] = {
@@ -35,19 +35,6 @@ module.exports = class RewardProjector {
     }
     const currencyAccountInfo = accountInfo.currencies[currency]
     currencyAccountInfo.balance -= amount
-
-    await this._rewardStore.updateAccountInfo({ accountInfo })
-  }
-
-  async onTransferExecuted({ entityId: accountId, currency, amount }) {
-    const accountInfo = await this._rewardStore.getQueries().getAccountInfo(accountId)
-    if (!accountInfo.currencies[currency]) {
-      accountInfo.currencies[currency] = {
-        balance: 0
-      }
-    }
-    const currencyAccountInfo = accountInfo.currencies[currency]
-    currencyAccountInfo.balance += amount
 
     await this._rewardStore.updateAccountInfo({ accountInfo })
   }
