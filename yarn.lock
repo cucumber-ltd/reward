@@ -305,7 +305,9 @@ mz@^2.4.0:
 
 neptunium@aslakhellesoy/neptunium:
   version "1.0.0"
-  resolved "https://codeload.github.com/aslakhellesoy/neptunium/tar.gz/76115ad00b0edb6eeca91ca3fe5b2221a3407955"
+  resolved "https://codeload.github.com/aslakhellesoy/neptunium/tar.gz/f59ed30b2a1409fa9ce130335bc53308c963d3ee"
+  dependencies:
+    value-object "^0.0.10"
 
 no-case@^2.2.0:
   version "2.3.2"
