@@ -1,4 +1,4 @@
-const CreateAccount = require('../entities/CreateAccount')
+const CreateAccount = require('../../aggregates/accounts/commands/CreateAccount')
 
 module.exports = class DomainRewards {
   constructor({ commandBus }) {

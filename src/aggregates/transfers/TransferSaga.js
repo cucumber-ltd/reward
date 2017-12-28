@@ -1,7 +1,8 @@
 const ValueObject = require('value-object')
-const Withdraw = require('../entities/Withdraw')
-const Deposit = require('../entities/Deposit')
+const Withdraw = require('../accounts/commands/Withdraw')
+const Deposit = require('../accounts/commands/Deposit')
 
+// https://groups.google.com/forum/#!topic/dddcqrs/UYXXR4iU8f4
 module.exports = class TransferSaga {
   static onTransferRequested() {
     return true

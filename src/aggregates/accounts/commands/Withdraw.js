@@ -1,7 +1,7 @@
 const ValueObject = require('value-object')
-const Account = require('../entities/Account')
+const Account = require('../Account')
 
-module.exports = class Deposit extends ValueObject.define({
+module.exports = class Withdraw extends ValueObject.define({
   accountId: 'string',
   transferId: 'string',
   currency: 'string',
@@ -9,6 +9,6 @@ module.exports = class Deposit extends ValueObject.define({
 }) {
   static async process(repository, { accountId, transferId, currency, amount }) {
     const account = await repository.load(Account, accountId)
-    await account.deposit({ transferId, currency, amount })
+    await account.withdraw({ transferId, currency, amount })
   }
 }

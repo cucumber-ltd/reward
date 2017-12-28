@@ -1,5 +1,5 @@
 const ValueObject = require('value-object')
-const Account = require('../entities/Account')
+const Account = require('../Account')
 
 module.exports = class CreateAccount extends ValueObject.define({
   accountId: 'string',

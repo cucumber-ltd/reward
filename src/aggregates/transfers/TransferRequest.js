@@ -1,6 +1,6 @@
-const { Entity, Event } = require('neptunium')
+const { Entity, Event } = require('../../../../neptunium/index')
 
-module.exports = class Transfer extends Entity {
+module.exports = class TransferRequest extends Entity {
   async create({ fromAccountId, toAccountId, currency, amount }) {
     await this.trigger(TransferRequested, { fromAccountId, toAccountId, currency, amount })
   }

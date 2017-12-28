@@ -1,13 +1,13 @@
 const { buildCommandBus } = require('neptunium')
 
-const DomainRewards = require('./rewards/DomainRewards')
-const DomainVoters = require('./voters/DomainVoters')
-const DomainDeposits = require('./deposits/DomainDeposits')
-const DomainTransfers = require('./transfers/DomainTransfers')
-const TransferSaga = require('./transfers/TransferSaga')
+const DomainRewards = require('./ports/rewards/DomainRewards')
+const DomainVoters = require('./ports/voters/DomainVoters')
+const DomainDeposits = require('./ports/deposits/DomainDeposits')
+const DomainTransfers = require('./ports/transfers/DomainTransfers')
+const TransferSaga = require('./aggregates/transfers/TransferSaga')
 
-const RewardProjector = require('./queries/RewardProjector')
-const RewardStore = require('./queries/RewardStore')
+const RewardProjector = require('./ports/queries/RewardProjector')
+const RewardStore = require('./ports/queries/RewardStore')
 
 module.exports = class DomainAssembly {
   constructor({ eventStore }) {
@@ -16,10 +16,10 @@ module.exports = class DomainAssembly {
     const projectors = [
       new RewardProjector({ rewardStore })
     ]
-    const sagas = [
+    const sagaClasses = [
       TransferSaga
     ]
-    const commandBus = buildCommandBus(eventStore, projectors, sagas)
+    const commandBus = buildCommandBus(eventStore, projectors, sagaClasses)
 
     const rewards = new DomainRewards({ commandBus })
     const voters = new DomainVoters({ commandBus })
