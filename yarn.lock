@@ -429,6 +429,10 @@ uuid@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.1.0.tgz#3dd3d3e790abc24d7b0d3a034ffababe28ebbc04"
 
+value-object@^0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/value-object/-/value-object-0.0.10.tgz#9f06dc6b6e56e210f7ffebc853f5e16dfdac6c85"
+
 verror@^1.9.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/verror/-/verror-1.10.0.tgz#3a105ca17053af55d6e270c1f8288682e18da400"

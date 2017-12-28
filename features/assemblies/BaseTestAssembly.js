@@ -1,10 +1,13 @@
 const uuid = require('uuid/v4')
+const { MemoryEventStore } = require('neptunium')
 const DomainAssembly = require('../../src/DomainAssembly')
 
 module.exports = class BaseTestAssembly {
   constructor() {
     this._ids = new Map()
-    this.domain = new DomainAssembly()
+
+    const eventStore = new MemoryEventStore()
+    this.domain = new DomainAssembly({ eventStore })
   }
 
   id(name) {
