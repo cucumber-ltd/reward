@@ -31,8 +31,8 @@ class Actor {
     await this._transfers.requestTransfer({ transferId, fromAccountId, toAccountId, currency, amount })
   }
 
-  async getBalance({ currency, gitHubIssue }) {
-    const accountInfo = await this._rewardQueries.getAccountInfoByExternalId(gitHubIssue)
+  async getBalance({ currency, externalId }) {
+    const accountInfo = await this._rewardQueries.getAccountInfoByExternalId(externalId)
     const currencyAccountInfo = accountInfo.currencies[currency]
     return currencyAccountInfo ? currencyAccountInfo.balance : 0
   }
