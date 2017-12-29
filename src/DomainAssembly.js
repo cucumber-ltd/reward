@@ -1,4 +1,5 @@
 const { buildCommandBus } = require('neptunium')
+const { PubSub } = require('subpub')
 
 const DomainRewards = require('./ports/rewards/DomainRewards')
 const DomainVoters = require('./ports/voters/DomainVoters')
@@ -11,7 +12,8 @@ const RewardStore = require('./ports/queries/RewardStore')
 
 module.exports = class DomainAssembly {
   constructor({ eventStore }) {
-    const rewardStore = new RewardStore()
+    const pubSub = new PubSub()
+    const rewardStore = new RewardStore({ pub: pubSub })
 
     const projectors = [
       new RewardProjector({ rewardStore })
@@ -31,5 +33,7 @@ module.exports = class DomainAssembly {
     this.deposits = deposits
     this.transfers = transfers
     this.rewardQueries = rewardStore.getQueries()
+
+    this.sub = pubSub
   }
 }

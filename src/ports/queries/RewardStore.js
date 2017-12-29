@@ -1,16 +1,20 @@
 module.exports = class RewardStore {
-  constructor() {
+  constructor({ pub }) {
     this._accountInfoByAccountId = new Map()
     this._accountIdByExternalId = new Map()
+    this._pub = pub
   }
 
   async createAccountInfo({ accountInfo, externalId }) {
     this._accountInfoByAccountId.set(accountInfo.accountId, accountInfo)
     this._accountIdByExternalId.set(externalId, accountInfo.accountId)
+    await this._pub.publish(accountInfo.accountId)
   }
 
-  async updateAccountInfo({ accountInfo }) {
+  async updateAccountInfo({ accountInfo, transferId }) {
     this._accountInfoByAccountId.set(accountInfo.accountId, accountInfo)
+    await this._pub.publish(accountInfo.accountId)
+    await this._pub.publish(transferId)
   }
 
   async _getAccountInfo(accountId) {

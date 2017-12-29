@@ -6,7 +6,7 @@ module.exports = class DomainDeposits {
     this._commandBus = commandBus
   }
 
-  async deposit({ accountId, currency, amount }) {
-    await this._commandBus.dispatchCommand(new Deposit({ accountId, transferId: null, currency, amount }))
+  async deposit({ accountId, transferId, currency, amount }) {
+    await this._commandBus.dispatchCommand(new Deposit({ accountId, transferId, currency, amount }))
   }
 }

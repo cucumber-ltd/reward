@@ -1,4 +1,3 @@
-const ValueObject = require('value-object')
 const Withdraw = require('../accounts/commands/Withdraw')
 const Deposit = require('../accounts/commands/Deposit')
 
@@ -34,16 +33,3 @@ module.exports = class TransferSaga {
     this._end()
   }
 }
-
-class ExecuteTransfer extends ValueObject.define({
-  fromAccountId: 'string',
-  toAccountId: 'string',
-  currency: 'string',
-  amount: 'number',
-}) {
-  static async process(repository, { fromAccountId, toAccountId, currency, amount }) {
-    const account = await repository.load(Account, toAccountId)
-    await account.executeTransfer({ fromAccountId, currency, amount })
-  }
-}
-

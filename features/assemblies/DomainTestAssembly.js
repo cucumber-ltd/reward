@@ -1,12 +1,11 @@
 const uuid = require('uuid/v4')
+const { SignalTrace } = require('subpub')
 const BaseTestAssembly = require('./BaseTestAssembly')
 
 module.exports = class DomainTestAssembly extends BaseTestAssembly {
   async actor(gitHubUser) {
     const id = this.id.bind(this)
-    const transfers = this.domain.transfers
-    const rewardQueries = this.domain.rewardQueries
-    return new Actor({ gitHubUser, id, transfers, rewardQueries })
+    return new Actor({ gitHubUser, id, domain: this.domain })
   }
 
   async start() {
@@ -17,22 +16,25 @@ module.exports = class DomainTestAssembly extends BaseTestAssembly {
 }
 
 class Actor {
-  constructor({ gitHubUser, id, transfers, rewardQueries }) {
+  constructor({ gitHubUser, id, domain }) {
     this._gitHubUser = gitHubUser
     this._id = id
-    this._transfers = transfers
-    this._rewardQueries = rewardQueries
+    this._domain = domain
   }
 
-  async transfer({ amount, currency, gitHubIssue }) {
+  async transfer({ currency, amount, gitHubIssue }) {
     const fromAccountId = this._id(this._gitHubUser)
     const toAccountId = this._id(gitHubIssue)
+    const trace = new SignalTrace(this._domain.sub)
+    await trace.start()
     const transferId = uuid()
-    await this._transfers.requestTransfer({ transferId, fromAccountId, toAccountId, currency, amount })
+    await this._domain.transfers.requestTransfer({ transferId, fromAccountId, toAccountId, currency, amount })
+    await trace.containsSignal(transferId)
   }
 
   async getBalance({ currency, externalId }) {
-    const accountInfo = await this._rewardQueries.getAccountInfoByExternalId(externalId)
+    const accountId = this._id(externalId)
+    const accountInfo = await this._domain.rewardQueries.getAccountInfo(accountId)
     const currencyAccountInfo = accountInfo.currencies[currency]
     return currencyAccountInfo ? currencyAccountInfo.balance : 0
   }
