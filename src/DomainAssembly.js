@@ -1,5 +1,5 @@
 const { buildCommandBus } = require('neptunium')
-const { PubSub } = require('subpub')
+const { PubSub } = require('pubsub-multi')
 
 const DomainRewards = require('./ports/rewards/DomainRewards')
 const DomainVoters = require('./ports/voters/DomainVoters')
@@ -34,6 +34,7 @@ module.exports = class DomainAssembly {
     this.transfers = transfers
     this.rewardQueries = rewardStore.getQueries()
 
+    this.pub = pubSub
     this.sub = pubSub
   }
 }
