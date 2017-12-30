@@ -1,4 +1,4 @@
-const { Entity, Event } = require('../../../../neptunium/index')
+const { Entity, Event } = require('neptunium')
 
 module.exports = class Account extends Entity {
   async create({ externalId }) {

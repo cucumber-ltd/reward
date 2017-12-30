@@ -1,5 +1,3 @@
-const ValueObject = require('value-object')
-
 module.exports = class RewardProjector {
   constructor({ rewardStore }) {
     this._rewardStore = rewardStore

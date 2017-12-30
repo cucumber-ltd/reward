@@ -1,4 +1,3 @@
-const ValueObject = require('value-object')
 const Deposit = require('../../aggregates/accounts/commands/Deposit')
 
 module.exports = class DomainDeposits {
