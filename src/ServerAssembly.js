@@ -1,6 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const { asyncRouter, WebServer } = require('express-extensions')
+const { asyncRouter, respond, WebServer } = require('express-extensions')
 const { subRouter } = require('pubsub-multi')
 
 module.exports = class ServerAssembly {
@@ -27,14 +27,5 @@ module.exports = class ServerAssembly {
 
     app.use(router)
     this.webServer = new WebServer(app)
-  }
-}
-
-function respond(result, res) {
-  if (result) {
-    res.setHeader('Content-Type', 'application/json')
-    res.status(200).end(JSON.stringify(result))
-  } else {
-    res.status(404).end()
   }
 }
