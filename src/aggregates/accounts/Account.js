@@ -1,8 +1,8 @@
 const { Entity, Event } = require('neptunium')
 
 module.exports = class Account extends Entity {
-  async create({ externalId }) {
-    await this.trigger(AccountCreated, { externalId })
+  async create({}) {
+    await this.trigger(AccountCreated, {})
   }
 
   async deposit({ transferId, currency, amount }) {
@@ -44,7 +44,6 @@ class AccountCreated extends Event {
 }
 
 AccountCreated.properties = {
-  externalId: 'string'
 }
 
 class AccountCredited extends Event {

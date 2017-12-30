@@ -1,20 +1,21 @@
 module.exports = class RewardProjector {
-  constructor({ rewardStore }) {
+  constructor({ rewardStore, rewardQueries }) {
     this._rewardStore = rewardStore
+    this._rewardQueries = rewardQueries
   }
 
-  async onAccountCreated({ entityId: accountId, externalId }) {
+  async onAccountCreated({ entityId: accountId }) {
     const accountInfo = {
       accountId,
       currencies: {},
       messages: []
     }
 
-    await this._rewardStore.createAccountInfo({ accountInfo, externalId })
+    await this._rewardStore.createAccountInfo({ accountInfo })
   }
 
   async onAccountCredited({ entityId: accountId, transferId, currency, amount }) {
-    const accountInfo = await this._rewardStore.getQueries().getAccountInfo(accountId)
+    const accountInfo = await this._rewardQueries.getAccountInfo(accountId)
     if (!accountInfo.currencies[currency]) {
       accountInfo.currencies[currency] = {
         balance: 0
@@ -27,7 +28,7 @@ module.exports = class RewardProjector {
   }
 
   async onAccountDebited({ entityId: accountId, transferId, currency, amount }) {
-    const accountInfo = await this._rewardStore.getQueries().getAccountInfo(accountId)
+    const accountInfo = await this._rewardQueries.getAccountInfo(accountId)
     if (!accountInfo.currencies[currency]) {
       accountInfo.currencies[currency] = {
         balance: 0
@@ -40,7 +41,7 @@ module.exports = class RewardProjector {
   }
 
   async onAccountDebitFailedDueToInsufficientFunds({ entityId: accountId, transferId, currency, amount }) {
-    const accountInfo = await this._rewardStore.getQueries().getAccountInfo(accountId)
+    const accountInfo = await this._rewardQueries.getAccountInfo(accountId)
     if (!accountInfo.currencies[currency]) {
       accountInfo.currencies[currency] = {
         balance: 0

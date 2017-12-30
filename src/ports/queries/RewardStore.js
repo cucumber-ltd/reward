@@ -4,7 +4,7 @@ module.exports = class RewardStore {
     this._pub = pub
   }
 
-  async createAccountInfo({ accountInfo, externalId }) {
+  async createAccountInfo({ accountInfo }) {
     this._accountInfoByAccountId.set(accountInfo.accountId, accountInfo)
     await this._pub.publish(accountInfo.accountId)
   }
@@ -17,11 +17,5 @@ module.exports = class RewardStore {
 
   async _getAccountInfo(accountId) {
     return this._accountInfoByAccountId.get(accountId)
-  }
-
-  getQueries() {
-    return {
-      getAccountInfo: this._getAccountInfo.bind(this)
-    }
   }
 }

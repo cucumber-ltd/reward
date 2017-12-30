@@ -9,14 +9,16 @@ const TransferSaga = require('./aggregates/transfers/TransferSaga')
 
 const RewardProjector = require('./ports/queries/RewardProjector')
 const RewardStore = require('./ports/queries/RewardStore')
+const RewardQueries = require('./ports/queries/RewardQueries')
 
 module.exports = class DomainAssembly {
   constructor({ eventStore }) {
     const pubSub = new PubSub()
     const rewardStore = new RewardStore({ pub: pubSub })
+    const rewardQueries = new RewardQueries({ rewardStore })
 
     const projectors = [
-      new RewardProjector({ rewardStore })
+      new RewardProjector({ rewardStore, rewardQueries })
     ]
     const sagaClasses = [
       TransferSaga
@@ -32,7 +34,7 @@ module.exports = class DomainAssembly {
     this.voters = voters
     this.deposits = deposits
     this.transfers = transfers
-    this.rewardQueries = rewardStore.getQueries()
+    this.rewardQueries = rewardQueries
 
     this.pub = pubSub
     this.sub = pubSub

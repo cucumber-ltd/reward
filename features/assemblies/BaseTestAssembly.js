@@ -49,8 +49,7 @@ class Actor {
     await this.trace.containsSignal(transferId)
   }
 
-  async getBalance({ currency, externalId }) {
-    const accountId = this.world.id(externalId)
+  async getBalance({ accountId, currency }) {
     const accountInfo = await this.world.rewardQueries.getAccountInfo(accountId)
     const currencyAccountInfo = accountInfo.currencies[currency]
     return currencyAccountInfo ? currencyAccountInfo.balance : 0

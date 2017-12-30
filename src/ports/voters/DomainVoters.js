@@ -5,10 +5,9 @@ module.exports = class DomainVoters {
     this._commandBus = commandBus
   }
 
-  async create({ accountId, gitHubUser }) {
+  async create({ accountId }) {
     await this._commandBus.dispatchCommand(new CreateAccount({
-      accountId,
-      externalId: gitHubUser
+      accountId
     }))
   }
 }

@@ -5,10 +5,9 @@ module.exports = class DomainRewards {
     this._commandBus = commandBus
   }
 
-  async create({ accountId, gitHubIssue }) {
+  async create({ accountId }) {
     await this._commandBus.dispatchCommand(new CreateAccount({
-      accountId,
-      externalId: gitHubIssue
+      accountId
     }))
   }
 }
