@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+find features/assemblies -name "*.js" | grep --invert-match Base | sort | xargs -I{} env CUCUMBER_ASSEMBLY="{}" ./cucumber "$@"
