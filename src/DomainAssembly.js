@@ -2,7 +2,7 @@ const { buildCommandBus } = require('neptunium')
 const { PubSub } = require('pubsub-multi')
 
 const DomainRewards = require('./ports/rewards/DomainRewards')
-const DomainVoters = require('./ports/voters/DomainVoters')
+const DomainUsers = require('./ports/users/DomainUsers')
 const DomainDeposits = require('./ports/deposits/DomainDeposits')
 const DomainTransfers = require('./ports/transfers/DomainTransfers')
 const TransferSaga = require('./aggregates/transfers/TransferSaga')
@@ -26,12 +26,12 @@ module.exports = class DomainAssembly {
     const commandBus = buildCommandBus(eventStore, projectors, sagaClasses)
 
     const rewards = new DomainRewards({ commandBus })
-    const voters = new DomainVoters({ commandBus })
+    const users = new DomainUsers({ commandBus })
     const deposits = new DomainDeposits({ commandBus })
     const transfers = new DomainTransfers({ commandBus })
 
     this.rewards = rewards
-    this.voters = voters
+    this.users = users
     this.deposits = deposits
     this.transfers = transfers
     this.rewardQueries = rewardQueries

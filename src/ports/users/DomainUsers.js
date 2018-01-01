@@ -1,6 +1,6 @@
 const CreateAccount = require('../../aggregates/accounts/commands/CreateAccount')
 
-module.exports = class DomainVoters {
+module.exports = class DomainUsers {
   constructor({ commandBus }) {
     this._commandBus = commandBus
   }
