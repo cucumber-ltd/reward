@@ -7,7 +7,8 @@ module.exports = class DomainUsers {
 
   async create({ accountHolderId }) {
     await this._commandBus.dispatchCommand(new CreateAccountHolder({
-      accountHolderId
+      accountHolderId,
+      currencies: ['USD']
     }))
   }
 }
