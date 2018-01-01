@@ -42,16 +42,16 @@ class Actor {
   }
 
   async transfer({ currency, amount, gitHubIssue }) {
-    const fromAccountId = this.world.id(this.gitHubUser)
-    const toAccountId = this.world.id(gitHubIssue)
-    const transferId = uuid()
-    await this.world.transfers.requestTransfer({ transferId, fromAccountId, toAccountId, currency, amount })
-    await this.trace.containsSignal(transferId)
+    const fromAccountHolderId = this.world.id(this.gitHubUser)
+    const toAccountHolderId = this.world.id(gitHubIssue)
+    const transactionId = uuid()
+    await this.world.transfers.requestTransfer({ transactionId, fromAccountHolderId, toAccountHolderId, currency, amount })
+    await this.trace.containsSignal(transactionId)
   }
 
-  async getBalance({ accountId, currency }) {
-    const accountInfo = await this.world.rewardQueries.getAccountInfo(accountId)
-    const currencyAccountInfo = accountInfo.currencies[currency]
-    return currencyAccountInfo ? currencyAccountInfo.balance : 0
+  async getBalance({ accountHolderId, currency }) {
+    const accountHolderInfo = await this.world.rewardQueries.getAccountHolderInfo(accountHolderId)
+    const currencyAccountHolderInfo = accountHolderInfo.currencies[currency]
+    return currencyAccountHolderInfo ? currencyAccountHolderInfo.balance : 0
   }
 }

@@ -1,21 +1,21 @@
 module.exports = class RewardStore {
   constructor({ pub }) {
-    this._accountInfoByAccountId = new Map()
+    this._accountHolderInfoByAccountId = new Map()
     this._pub = pub
   }
 
-  async createAccountInfo({ accountInfo }) {
-    this._accountInfoByAccountId.set(accountInfo.accountId, accountInfo)
-    await this._pub.publish(accountInfo.accountId)
+  async createAccountHolderInfo({ accountHolderInfo }) {
+    this._accountHolderInfoByAccountId.set(accountHolderInfo.accountHolderId, accountHolderInfo)
+    await this._pub.publish(accountHolderInfo.accountHolderId)
   }
 
-  async updateAccountInfo({ accountInfo, transferId }) {
-    this._accountInfoByAccountId.set(accountInfo.accountId, accountInfo)
-    await this._pub.publish(accountInfo.accountId)
-    await this._pub.publish(transferId)
+  async updateAccountHolderInfo({ accountHolderInfo, transactionId }) {
+    this._accountHolderInfoByAccountId.set(accountHolderInfo.accountHolderId, accountHolderInfo)
+    await this._pub.publish(accountHolderInfo.accountHolderId)
+    await this._pub.publish(transactionId)
   }
 
-  async _getAccountInfo(accountId) {
-    return this._accountInfoByAccountId.get(accountId)
+  async _getAccountHolderInfo(accountHolderId) {
+    return this._accountHolderInfoByAccountId.get(accountHolderId)
   }
 }

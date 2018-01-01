@@ -1,8 +1,8 @@
 const { Entity, Event } = require('neptunium')
 
 module.exports = class TransferRequest extends Entity {
-  async create({ fromAccountId, toAccountId, currency, amount }) {
-    await this.trigger(TransferRequested, { fromAccountId, toAccountId, currency, amount })
+  async create({ fromAccountHolderId, toAccountHolderId, currency, amount }) {
+    await this.trigger(TransferRequested, { fromAccountHolderId, toAccountHolderId, currency, amount })
   }
 }
 
@@ -10,8 +10,8 @@ class TransferRequested extends Event {
 }
 
 TransferRequested.properties = {
-  fromAccountId: 'string',
-  toAccountId: 'string',
+  fromAccountHolderId: 'string',
+  toAccountHolderId: 'string',
   currency: 'string',
   amount: 'number'
 }

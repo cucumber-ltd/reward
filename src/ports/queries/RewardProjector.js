@@ -4,51 +4,51 @@ module.exports = class RewardProjector {
     this._rewardQueries = rewardQueries
   }
 
-  async onAccountCreated({ entityId: accountId }) {
-    const accountInfo = {
-      accountId,
+  async onAccountHolderCreated({ entityId: accountHolderId }) {
+    const accountHolderInfo = {
+      accountHolderId,
       currencies: {},
       messages: []
     }
 
-    await this._rewardStore.createAccountInfo({ accountInfo })
+    await this._rewardStore.createAccountHolderInfo({ accountHolderInfo })
   }
 
-  async onAccountCredited({ entityId: accountId, transferId, currency, amount }) {
-    const accountInfo = await this._rewardQueries.getAccountInfo(accountId)
-    if (!accountInfo.currencies[currency]) {
-      accountInfo.currencies[currency] = {
+  async onAccountCredited({ entityId: accountHolderId, transactionId, currency, amount }) {
+    const accountHolderInfo = await this._rewardQueries.getAccountHolderInfo(accountHolderId)
+    if (!accountHolderInfo.currencies[currency]) {
+      accountHolderInfo.currencies[currency] = {
         balance: 0
       }
     }
-    const currencyAccountInfo = accountInfo.currencies[currency]
-    currencyAccountInfo.balance += amount
+    const currencyAccountHolderInfo = accountHolderInfo.currencies[currency]
+    currencyAccountHolderInfo.balance += amount
 
-    await this._rewardStore.updateAccountInfo({ accountInfo, transferId })
+    await this._rewardStore.updateAccountHolderInfo({ accountHolderInfo, transactionId })
   }
 
-  async onAccountDebited({ entityId: accountId, transferId, currency, amount }) {
-    const accountInfo = await this._rewardQueries.getAccountInfo(accountId)
-    if (!accountInfo.currencies[currency]) {
-      accountInfo.currencies[currency] = {
+  async onAccountDebited({ entityId: accountHolderId, transactionId, currency, amount }) {
+    const accountHolderInfo = await this._rewardQueries.getAccountHolderInfo(accountHolderId)
+    if (!accountHolderInfo.currencies[currency]) {
+      accountHolderInfo.currencies[currency] = {
         balance: 0
       }
     }
-    const currencyAccountInfo = accountInfo.currencies[currency]
-    currencyAccountInfo.balance -= amount
+    const currencyAccountHolderInfo = accountHolderInfo.currencies[currency]
+    currencyAccountHolderInfo.balance -= amount
 
-    await this._rewardStore.updateAccountInfo({ accountInfo, transferId })
+    await this._rewardStore.updateAccountHolderInfo({ accountHolderInfo, transactionId })
   }
 
-  async onAccountDebitFailedDueToInsufficientFunds({ entityId: accountId, transferId, currency, amount }) {
-    const accountInfo = await this._rewardQueries.getAccountInfo(accountId)
-    if (!accountInfo.currencies[currency]) {
-      accountInfo.currencies[currency] = {
+  async onAccountDebitFailedDueToInsufficientFunds({ entityId: accountHolderId, transactionId, currency, amount }) {
+    const accountHolderInfo = await this._rewardQueries.getAccountHolderInfo(accountHolderId)
+    if (!accountHolderInfo.currencies[currency]) {
+      accountHolderInfo.currencies[currency] = {
         balance: 0
       }
     }
-    const currencyAccountInfo = accountInfo.currencies[currency]
-    accountInfo.messages.push(`Failed to debit ${amount} from ${currency} account due to insufficient funds. Balance: ${currencyAccountInfo.balance}`)
-    await this._rewardStore.updateAccountInfo({ accountInfo, transferId })
+    const currencyAccountHolderInfo = accountHolderInfo.currencies[currency]
+    accountHolderInfo.messages.push(`Failed to debit ${amount} from ${currency} account due to insufficient funds. Balance: ${currencyAccountHolderInfo.balance}`)
+    await this._rewardStore.updateAccountHolderInfo({ accountHolderInfo, transactionId })
   }
 }

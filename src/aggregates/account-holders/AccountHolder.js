@@ -1,20 +1,20 @@
 const { Entity, Event } = require('neptunium')
 
-module.exports = class Account extends Entity {
+module.exports = class AccountHolder extends Entity {
   async create({}) {
-    await this.trigger(AccountCreated, {})
+    await this.trigger(AccountHolderCreated, {})
   }
 
-  async deposit({ transferId, currency, amount }) {
-    await this.trigger(AccountCredited, { transferId, currency, amount })
+  async deposit({ transactionId, currency, amount }) {
+    await this.trigger(AccountCredited, { transactionId, currency, amount })
   }
 
-  async withdraw({ transferId, currency, amount }) {
+  async withdraw({ transactionId, currency, amount }) {
     const balance = this._getBalance(currency)
     if (balance < amount) {
-      await this.trigger(AccountDebitFailedDueToInsufficientFunds, { transferId, currency, amount })
+      await this.trigger(AccountDebitFailedDueToInsufficientFunds, { transactionId, currency, amount })
     } else {
-      await this.trigger(AccountDebited, { transferId, currency, amount })
+      await this.trigger(AccountDebited, { transactionId, currency, amount })
     }
   }
 
@@ -24,7 +24,7 @@ module.exports = class Account extends Entity {
     return balance
   }
 
-  onAccountCreated({}) {
+  onAccountHolderCreated({}) {
     this._balances = new Map()
     this._balances.set('USD', 0)
   }
@@ -40,17 +40,17 @@ module.exports = class Account extends Entity {
   }
 }
 
-class AccountCreated extends Event {
+class AccountHolderCreated extends Event {
 }
 
-AccountCreated.properties = {
+AccountHolderCreated.properties = {
 }
 
 class AccountCredited extends Event {
 }
 
 AccountCredited.properties = {
-  transferId: 'string',
+  transactionId: 'string',
   currency: 'string',
   amount: 'number'
 }
@@ -59,7 +59,7 @@ class AccountDebited extends Event {
 }
 
 AccountDebited.properties = {
-  transferId: 'string',
+  transactionId: 'string',
   currency: 'string',
   amount: 'number'
 }
@@ -68,7 +68,7 @@ class AccountDebitFailedDueToInsufficientFunds extends Event {
 }
 
 AccountDebitFailedDueToInsufficientFunds.properties = {
-  transferId: 'string',
+  transactionId: 'string',
   currency: 'string',
   amount: 'number'
 }

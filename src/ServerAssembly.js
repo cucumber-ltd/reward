@@ -13,15 +13,15 @@ module.exports = class ServerAssembly {
 
     const router = asyncRouter()
 
-    router.$get('/accounts/:accountId', async (req, res) => {
-      const { accountId } = req.params
-      const accountInfo = await rewardQueries.getAccountInfo(accountId)
-      respond(accountInfo, res)
+    router.$get('/accounts/:accountHolderId', async (req, res) => {
+      const { accountHolderId } = req.params
+      const accountHolderInfo = await rewardQueries.getAccountHolderInfo(accountHolderId)
+      respond(accountHolderInfo, res)
     })
 
     router.$post('/transfers', async (req, res) => {
-      const { transferId, fromAccountId, toAccountId, currency, amount } = req.body
-      await transfers.requestTransfer({ transferId, fromAccountId, toAccountId, currency, amount })
+      const { transactionId, fromAccountHolderId, toAccountHolderId, currency, amount } = req.body
+      await transfers.requestTransfer({ transactionId, fromAccountHolderId, toAccountHolderId, currency, amount })
       res.status(201).end()
     })
 

@@ -1,11 +1,11 @@
-const Deposit = require('../../aggregates/accounts/commands/Deposit')
+const Deposit = require('../../aggregates/account-holders/commands/Deposit')
 
 module.exports = class DomainDeposits {
   constructor({ commandBus }) {
     this._commandBus = commandBus
   }
 
-  async deposit({ accountId, transferId, currency, amount }) {
-    await this._commandBus.dispatchCommand(new Deposit({ accountId, transferId, currency, amount }))
+  async deposit({ accountHolderId, transactionId, currency, amount }) {
+    await this._commandBus.dispatchCommand(new Deposit({ accountHolderId, transactionId, currency, amount }))
   }
 }

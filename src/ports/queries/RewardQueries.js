@@ -3,7 +3,7 @@ module.exports = class RewardQueries {
     this._rewardStore = rewardStore
   }
 
-  async getAccountInfo(accountId) {
-    return this._rewardStore._getAccountInfo(accountId)
+  async getAccountHolderInfo(accountHolderId) {
+    return this._rewardStore._getAccountHolderInfo(accountHolderId)
   }
 }

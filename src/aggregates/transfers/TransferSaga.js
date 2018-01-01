@@ -1,5 +1,5 @@
-const Withdraw = require('../accounts/commands/Withdraw')
-const Deposit = require('../accounts/commands/Deposit')
+const Withdraw = require('../account-holders/commands/Withdraw')
+const Deposit = require('../account-holders/commands/Deposit')
 
 // https://groups.google.com/forum/#!topic/dddcqrs/UYXXR4iU8f4
 module.exports = class TransferSaga {
@@ -12,24 +12,24 @@ module.exports = class TransferSaga {
     this._end = end
   }
 
-  async onTransferRequested({ entityId: transferId, fromAccountId, toAccountId, currency, amount }) {
-    this._transferId = transferId
-    this._toAccountId = toAccountId
-    await this._commandBus.dispatchCommand(new Withdraw({ accountId: fromAccountId, transferId, currency, amount }))
+  async onTransferRequested({ entityId: transactionId, fromAccountHolderId, toAccountHolderId, currency, amount }) {
+    this._transactionId = transactionId
+    this._toAccountHolderId = toAccountHolderId
+    await this._commandBus.dispatchCommand(new Withdraw({ accountHolderId: fromAccountHolderId, transactionId, currency, amount }))
   }
 
-  async onAccountDebited({ transferId, currency, amount }) {
-    if (transferId !== this._transferId) return
-    await this._commandBus.dispatchCommand(new Deposit({ accountId: this._toAccountId, transferId, currency, amount }))
+  async onAccountDebited({ transactionId, currency, amount }) {
+    if (transactionId !== this._transactionId) return
+    await this._commandBus.dispatchCommand(new Deposit({ accountHolderId: this._toAccountHolderId, transactionId, currency, amount }))
   }
 
-  async onAccountCredited({ transferId }) {
-    if (transferId !== this._transferId) return
+  async onAccountCredited({ transactionId }) {
+    if (transactionId !== this._transactionId) return
     this._end()
   }
 
-  async AccountDebitFailedDueToInsufficientFunds({ transferId }) {
-    if (transferId !== this._transferId) return
+  async AccountDebitFailedDueToInsufficientFunds({ transactionId }) {
+    if (transactionId !== this._transactionId) return
     this._end()
   }
 }

@@ -1,13 +1,13 @@
-const CreateAccount = require('../../aggregates/accounts/commands/CreateAccount')
+const CreateAccountHolder = require('../../aggregates/account-holders/commands/CreateAccountHolder')
 
 module.exports = class DomainUsers {
   constructor({ commandBus }) {
     this._commandBus = commandBus
   }
 
-  async create({ accountId }) {
-    await this._commandBus.dispatchCommand(new CreateAccount({
-      accountId
+  async create({ accountHolderId }) {
+    await this._commandBus.dispatchCommand(new CreateAccountHolder({
+      accountHolderId
     }))
   }
 }

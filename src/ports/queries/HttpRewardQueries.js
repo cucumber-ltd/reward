@@ -4,7 +4,7 @@ module.exports = class HttpRewardQueries {
     this._fetch22 = fetch22
   }
 
-  async getAccountInfo(accountId) {
-    return this._fetch22.get(`/accounts/${encodeURIComponent(accountId)}`)
+  async getAccountHolderInfo(accountHolderId) {
+    return this._fetch22.get(`/accounts/${encodeURIComponent(accountHolderId)}`)
   }
 }

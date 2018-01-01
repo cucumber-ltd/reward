@@ -4,7 +4,7 @@ module.exports = class HttpTransfers {
     this._fetch22 = fetch22
   }
 
-  async requestTransfer({ transferId, fromAccountId, toAccountId, currency, amount }) {
-    await this._fetch22.post('/transfers', { transferId, fromAccountId, toAccountId, currency, amount })
+  async requestTransfer({ transactionId, fromAccountHolderId, toAccountHolderId, currency, amount }) {
+    await this._fetch22.post('/transfers', { transactionId, fromAccountHolderId, toAccountHolderId, currency, amount })
   }
 }

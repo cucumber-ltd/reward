@@ -5,11 +5,11 @@ module.exports = class DomainTransfers {
     this._commandBus = commandBus
   }
 
-  async requestTransfer({ transferId, fromAccountId, toAccountId, currency, amount }) {
+  async requestTransfer({ transactionId, fromAccountHolderId, toAccountHolderId, currency, amount }) {
     await this._commandBus.dispatchCommand(new RequestTransfer({
-      transferId,
-      fromAccountId,
-      toAccountId,
+      transactionId,
+      fromAccountHolderId,
+      toAccountHolderId,
       currency,
       amount
     }))
