@@ -1,13 +1,14 @@
-const CreateAccountHolder = require('../../aggregates/account-holders/commands/CreateAccountHolder')
+const CreateReward = require('../../aggregates/account-holders/commands/CreateReward')
 
 module.exports = class DomainRewards {
   constructor({ commandBus }) {
     this._commandBus = commandBus
   }
 
-  async create({ accountHolderId }) {
-    await this._commandBus.dispatchCommand(new CreateAccountHolder({
+  async create({ accountHolderId, gitHubIssue }) {
+    await this._commandBus.dispatchCommand(new CreateReward({
       accountHolderId,
+      gitHubIssue,
       currencies: ['USD']
     }))
   }

@@ -5,6 +5,10 @@ module.exports = class AccountHolder extends Entity {
     await this.trigger(AccountHolderCreated, {})
   }
 
+  async linkToExternalId({ idType, externalId }) {
+    await this.trigger(AccountHolderLinkedToExternalId, { idType, externalId })
+  }
+
   async addAccount({ currency }) {
     await this.trigger(AccountAdded, { currency })
   }
@@ -63,6 +67,14 @@ class AccountHolderCreated extends Event {
 }
 
 AccountHolderCreated.properties = {}
+
+class AccountHolderLinkedToExternalId extends Event {
+}
+
+AccountHolderLinkedToExternalId.properties = {
+  idType: 'string',
+  externalId: 'string'
+}
 
 class AccountAdded extends Event {
 }
