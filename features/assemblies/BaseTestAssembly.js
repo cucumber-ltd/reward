@@ -41,17 +41,31 @@ class Actor {
     this.world = world
   }
 
+  // Commands
+
   async transfer({ currency, amount, gitHubIssue }) {
     const fromAccountHolderId = this.world.id(this.gitHubUser)
     const toAccountHolderId = this.world.id(gitHubIssue)
     const transactionId = uuid()
-    await this.world.transfers.requestTransfer({ transactionId, fromAccountHolderId, toAccountHolderId, currency, amount })
+    await this.world.transfers.requestTransfer({
+      transactionId,
+      fromAccountHolderId,
+      toAccountHolderId,
+      currency,
+      amount
+    })
     await this.trace.containsSignal(transactionId)
   }
 
+  // Queries
+
   async getBalance({ accountHolderId, currency }) {
     const accountHolderInfo = await this.world.rewardQueries.getAccountHolderInfo(accountHolderId)
-    const currencyAccountHolderInfo = accountHolderInfo.currencies[currency]
-    return currencyAccountHolderInfo ? currencyAccountHolderInfo.balance : 0
+    const accountInfo = accountHolderInfo.accounts.find(accountInfo => accountInfo.currency === currency)
+    return accountInfo ? accountInfo.balance : 0
+  }
+
+  async rewards({ gitHubOrg }) {
+    return this.world.rewardQueries.getRewards({ gitHubOrg })
   }
 }

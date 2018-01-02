@@ -5,6 +5,10 @@ module.exports = class HttpRewardQueries {
   }
 
   async getAccountHolderInfo(accountHolderId) {
-    return this._fetch22.get(`/accounts/${encodeURIComponent(accountHolderId)}`)
+    return this._fetch22.get(`/accountholders/${encodeURIComponent(accountHolderId)}`)
+  }
+
+  async getRewards({ gitHubOrg }) {
+    return this._fetch22.get(`/rewards/github/${encodeURIComponent(gitHubOrg)}`)
   }
 }

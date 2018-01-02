@@ -13,10 +13,16 @@ module.exports = class ServerAssembly {
 
     const router = asyncRouter()
 
-    router.$get('/accounts/:accountHolderId', async (req, res) => {
+    router.$get('/accountholders/:accountHolderId', async (req, res) => {
       const { accountHolderId } = req.params
       const accountHolderInfo = await rewardQueries.getAccountHolderInfo(accountHolderId)
       respond(accountHolderInfo, res)
+    })
+
+    router.$get('/rewards/github/:gitHubOrg', async (req, res) => {
+      const { gitHubOrg } = req.params
+      const accountHolderInfos = await rewardQueries.getRewards({ gitHubOrg })
+      respond(accountHolderInfos, res)
     })
 
     router.$post('/transfers', async (req, res) => {
