@@ -1,13 +1,22 @@
 const { defineParameterType } = require('cucumber')
 
 defineParameterType({
-  name: 'gitHubIssue',
-  regexp: /[\w-]+\/[\w-]+#\d+/,
+  name: 'gitHubUser',
+  regexp: /@([\w-/]+)/
 })
 
 defineParameterType({
-  name: 'gitHubUser',
+  name: 'actor',
   regexp: /@([\w-/]+)/,
+  transformer(gitHubUser) {
+    const accountHolderId = this.id(gitHubUser)
+    return this.actor(accountHolderId)
+  }
+})
+
+defineParameterType({
+  name: 'gitHubIssue',
+  regexp: /[\w-]+\/[\w-]+#\d+/,
 })
 
 defineParameterType({

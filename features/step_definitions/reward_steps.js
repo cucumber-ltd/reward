@@ -13,8 +13,7 @@ Given('the following rewards have been created:', async function(dataTable) {
   }
 })
 
-Then('{gitHubUser} should see the following rewards for {word}:', async function(gitHubUser, gitHubOrg, dataTable) {
-  const actor = await this.actor(gitHubUser)
+Then('{actor} should see the following rewards for {word}:', async function(actor, gitHubOrg, dataTable) {
   const accountHolderInfos = await actor.rewards({ gitHubOrg })
   const actualTable = []
 

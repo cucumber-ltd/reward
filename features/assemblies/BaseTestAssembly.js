@@ -1,5 +1,4 @@
 const uuid = require('uuid/v4')
-const { SignalTrace } = require('pubsub-multi')
 const { MemoryEventStore } = require('neptunium')
 const DomainAssembly = require('../../src/DomainAssembly')
 
@@ -12,60 +11,19 @@ module.exports = class BaseTestAssembly {
     this.domainAssembly = new DomainAssembly({ eventStore })
   }
 
-  async actor(gitHubUser) {
-    if (!this._actors.has(gitHubUser)) {
-      const trace = new SignalTrace(this.sub)
-      await trace.start()
-      await this.pub.subscriptions(null, 1)
-      const actor = new Actor({
-        gitHubUser,
-        trace,
-        world: this
-      })
-      this._actors.set(gitHubUser, actor)
+  async actor(accountHolderId) {
+    if (!this._actors.has(accountHolderId)) {
+      const actor = this.makeActor(accountHolderId)
+      await actor.start(this.domainAssembly.pub)
+      this._actors.set(accountHolderId, actor)
     }
-    return this._actors.get(gitHubUser)
+    return this._actors.get(accountHolderId)
   }
 
   id(name) {
+    if (!name) return null
     if (!this._ids.has(name))
       this._ids.set(name, `${name}-${uuid()}`)
     return this._ids.get(name)
-  }
-}
-
-class Actor {
-  constructor({ gitHubUser, trace, world }) {
-    this.gitHubUser = gitHubUser
-    this.trace = trace
-    this.world = world
-  }
-
-  // Commands
-
-  async transfer({ currency, amount, gitHubIssue }) {
-    const fromAccountHolderId = this.world.id(this.gitHubUser)
-    const toAccountHolderId = this.world.id(gitHubIssue)
-    const transactionId = uuid()
-    await this.world.transfers.requestTransfer({
-      transactionId,
-      fromAccountHolderId,
-      toAccountHolderId,
-      currency,
-      amount
-    })
-    await this.trace.containsSignal(transactionId)
-  }
-
-  // Queries
-
-  async getBalance({ accountHolderId, currency }) {
-    const accountHolderInfo = await this.world.rewardQueries.getAccountHolderInfo(accountHolderId)
-    const accountInfo = accountHolderInfo.accounts.find(accountInfo => accountInfo.currency === currency)
-    return accountInfo ? accountInfo.balance : 0
-  }
-
-  async rewards({ gitHubOrg }) {
-    return this.world.rewardQueries.getRewards({ gitHubOrg })
   }
 }
