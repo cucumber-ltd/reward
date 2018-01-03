@@ -3,13 +3,13 @@ const { Given, Then } = require('cucumber')
 
 Given('a reward has been created for {gitHubIssue}', async function(gitHubIssue) {
   const accountHolderId = this.id(gitHubIssue)
-  await this.domainAssembly.rewards.create({ accountHolderId, gitHubIssue })
+  await this.rewards.create({ accountHolderId, gitHubIssue })
 })
 
 Given('the following rewards have been created:', async function(dataTable) {
   for (const [gitHubIssue] of dataTable.rows()) {
     const accountHolderId = this.id(gitHubIssue)
-    await this.domainAssembly.rewards.create({ accountHolderId, gitHubIssue })
+    await this.rewards.create({ accountHolderId, gitHubIssue })
   }
 })
 

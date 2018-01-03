@@ -1,10 +1,18 @@
 const { MemoryEventStore } = require('neptunium')
-const DomainAssembly = require('./src/DomainAssembly')
+const { PubSub } = require('pubsub-multi')
+const CQRSAssembly = require('./src/CQRSAssembly')
 const ServerAssembly = require('./src/ServerAssembly')
 
 const eventStore = new MemoryEventStore()
-const domainAssembly = new DomainAssembly({ eventStore })
-const serverAssembly = new ServerAssembly(domainAssembly)
+const pubSub = new PubSub()
+const pub = pubSub
+const sub = pubSub
+
+const { readAssembly, writeAssembly } = new CQRSAssembly({ eventStore, pub })
+const { transfers } = writeAssembly
+const { rewardQueries } = readAssembly
+
+const serverAssembly = new ServerAssembly({ transfers, rewardQueries, sub })
 const port = parseInt(process.env.PORT) || 8866
 
 serverAssembly.webServer.listen(port)

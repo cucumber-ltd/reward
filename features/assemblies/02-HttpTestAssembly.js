@@ -10,7 +10,8 @@ const port = 9875
 module.exports = class HttpTestAssembly extends BaseTestAssembly {
   constructor() {
     super()
-    this.serverAssembly = new ServerAssembly(this.domainAssembly)
+    const { transfers, rewardQueries, sub } = this
+    this.serverAssembly = new ServerAssembly({ transfers, rewardQueries, sub })
   }
 
   makeActor(accountHolderId) {

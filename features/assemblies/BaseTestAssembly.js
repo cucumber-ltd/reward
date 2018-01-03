@@ -1,6 +1,7 @@
 const uuid = require('uuid/v4')
+const { PubSub } = require('pubsub-multi')
 const { MemoryEventStore } = require('neptunium')
-const DomainAssembly = require('../../src/DomainAssembly')
+const CQRSAssembly = require('../../src/CQRSAssembly')
 
 module.exports = class BaseTestAssembly {
   constructor() {
@@ -8,13 +9,27 @@ module.exports = class BaseTestAssembly {
     this._actors = new Map()
 
     const eventStore = new MemoryEventStore()
-    this.domainAssembly = new DomainAssembly({ eventStore })
+    const pubSub = new PubSub()
+    const pub = pubSub
+    const sub = pubSub
+
+    const { readAssembly, writeAssembly } = new CQRSAssembly({ eventStore, pub })
+    const { rewards, users, deposits, transfers } = writeAssembly
+    const { rewardQueries } = readAssembly
+
+    this.rewards = rewards
+    this.users = users
+    this.deposits = deposits
+    this.transfers = transfers
+    this.rewardQueries = rewardQueries
+    this.pub = pub
+    this.sub = sub
   }
 
   async actor(accountHolderId) {
     if (!this._actors.has(accountHolderId)) {
       const actor = this.makeActor(accountHolderId)
-      await actor.start(this.domainAssembly.pub)
+      await actor.start(this.pub)
       this._actors.set(accountHolderId, actor)
     }
     return this._actors.get(accountHolderId)
