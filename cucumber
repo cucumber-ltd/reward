@@ -1,2 +1,8 @@
 #!/usr/bin/env bash
-node node_modules/.bin/cucumber.js "$@"
+
+echo "CUCUMBER_ASSEMBLY=${CUCUMBER_ASSEMBLY}"
+if [[ ${CUCUMBER_ASSEMBLY} =~ React ]]; then
+    node node_modules/.bin/cucumber-electron "$@"
+else
+    node node_modules/.bin/cucumber.js "$@"
+fi

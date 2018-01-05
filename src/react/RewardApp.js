@@ -1,16 +1,17 @@
-const { createElement, Component } = require('react')
+const React = require('react')
 const hyperx = require('hyperx')
+function createElement(Component, props, children) {
+  return React.createElement(Component, props, ...children)
+}
 const hx = hyperx(createElement)
 
-module.exports = class RewardApp extends Component {
+module.exports = class RewardApp extends React.Component {
   constructor(props) {
     super(props)
     this.state = { rewards: [] }
-    console.log('new RewardApp', props)
   }
 
   componentDidMount() {
-    console.log('componentDidMount')
     this._streamState()
       .catch(err => console.error('Failed to subscribe', err))
   }
@@ -24,7 +25,7 @@ module.exports = class RewardApp extends Component {
     await this.props.sub.subscribe(null, rerender)
   }
 
-  render(a1, a2) {
+  render() {
     return hx`
       <div>
         ${this.state.rewards.map(reward => Reward({ reward }))}
@@ -34,18 +35,18 @@ module.exports = class RewardApp extends Component {
 
 const Reward = ({ reward }) => {
   return hx`
-    <div data-account-holder-id="${reward.accountHolderId}" data-type="Reward">
+    <div key="${reward.accountHolderId}" data-account-holder-id="${reward.accountHolderId}" data-type="AccountHolderInfo">
       <h2 aria-label="GitHub Issue">${reward.externalIds.gitHubIssue}</h2>
-      ${reward.accounts.map(account => Account({ account }))}
+      ${reward.accounts.map(account => Account({ account, key: account.currency }))}
     </div>`
 }
 
 const Account = ({ account }) => {
   return hx`
-    <div data-account-currency="${account.currency}" data-type="Account">
+    <div key="${account.currency}" data-account-currency="${account.currency}" data-type="Account">
       <h3>
-        <span aria-label="Balance">${account.balance}</span>
-        <span aria-label="Currency">${account.currency}</span>
+        <span key="balance" aria-label="Balance">${account.balance}</span>
+        <span key="currency" aria-label="Currency">${account.currency}</span>
       </h3>
     </div>`
 }

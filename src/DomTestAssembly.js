@@ -1,8 +1,8 @@
 const TestDomTransfers = require('./ports/transfers/TestDomTransfers')
-const TestDomRewardQueries = require('./ports/queries/TestDomRewardQueries')
+const TestDomRewardQueries = require('./ports/queries/test/TestDomRewardQueries')
 
 module.exports = class DomTestAssembly {
-  constructor($domNode) {
+  constructor({ $domNode }) {
     this.transfers = new TestDomTransfers({ $domNode })
     this.rewardQueries = new TestDomRewardQueries({ $domNode })
   }

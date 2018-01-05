@@ -10,21 +10,15 @@ const port = 9875
 module.exports = class HttpTestAssembly extends BaseTestAssembly {
   constructor() {
     super()
-    const { transfers, rewardQueries, sub } = this
-    this.serverAssembly = new ServerAssembly({ transfers, rewardQueries, sub })
+    const { sub, transfers, rewardQueries } = this
+    this.serverAssembly = new ServerAssembly({ sub, transfers, rewardQueries })
   }
 
   makeActor(accountHolderId) {
     const baseUrl = `http://localhost:${port}`
     const httpAssembly = new HttpAssembly({ baseUrl, fetch, EventSource })
     const { sub, transfers, rewardQueries } = httpAssembly
-
-    return new Actor({
-      accountHolderId,
-      sub,
-      transfers,
-      rewardQueries,
-    })
+    return new Actor({ accountHolderId, sub, transfers, rewardQueries })
   }
 
   async start() {
