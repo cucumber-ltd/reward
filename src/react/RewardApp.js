@@ -21,8 +21,9 @@ module.exports = class RewardApp extends React.Component {
       const rewards = await this.props.rewardQueries.getRewards({ gitHubOrg: 'cucumber' })
       this.setState({ rewards })
     }
+    // TODO: Subscribe to gitHubOrg
+    await this.props.sub.subscribe('TODO', rerender)
     await rerender()
-    await this.props.sub.subscribe(null, rerender)
   }
 
   render() {
@@ -43,7 +44,7 @@ const Reward = ({ reward }) => {
 
 const Account = ({ account }) => {
   return hx`
-    <div key="${account.currency}" data-account-currency="${account.currency}" data-type="Account">
+    <div key="${account.currency}" data-account-currency="${account.currency}" data-type="AccountInfo">
       <h3>
         <span key="balance" aria-label="Balance">${account.balance}</span>
         <span key="currency" aria-label="Currency">${account.currency}</span>

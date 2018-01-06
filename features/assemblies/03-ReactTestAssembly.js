@@ -1,3 +1,15 @@
+// Disable React DevTools warning: https://github.com/facebook/react/issues/3877#issuecomment-335679554
+if (typeof window !== 'undefined') {
+  window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+    supportsFiber: true,
+    inject: () => {
+    },
+    onCommitFiberRoot: () => {
+    },
+    onCommitFiberUnmount: () => {
+    }
+  }
+}
 const ReactAssembly = require('../../src/ReactAssembly')
 const DomTestAssembly = require('../../src/DomTestAssembly')
 const Actor = require('../support/Actor')

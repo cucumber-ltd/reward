@@ -13,6 +13,6 @@ describe('TestDomRewardQueries', () => {
 
     // TODO: Add a start() method, or make this a regular function
     new ReactAssembly({ sub, rewardQueries, $domNode })
-    return new TestDomRewardQueries($domNode)
+    return new TestDomRewardQueries({ $domNode })
   })
 })

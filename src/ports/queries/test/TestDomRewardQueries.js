@@ -1,5 +1,6 @@
 module.exports = class TestDomRewardQueries {
-  constructor($domNode) {
+  constructor({ $domNode }) {
+    if (!$domNode) throw new Error('No $domNode')
     this.$domNode = $domNode
   }
 
@@ -8,7 +9,7 @@ module.exports = class TestDomRewardQueries {
   }
 
   async getRewards({ gitHubOrg }) {
-    throw new Error('TODO')
+    return [...this.$domNode.querySelectorAll('[data-type="AccountHolderInfo"]')].map(makeAccountHolderInfo)
   }
 }
 
@@ -17,7 +18,7 @@ const makeAccountHolderInfo = $accountHolder => ({
   externalIds: {
     gitHubIssue: $accountHolder.querySelector('[aria-label="GitHub Issue"]').textContent
   },
-  accounts: [...$accountHolder.querySelectorAll('[data-type="Account"]')].map(makeAccountInfo)
+  accounts: [...$accountHolder.querySelectorAll('[data-type="AccountInfo"]')].map(makeAccountInfo)
 })
 
 const makeAccountInfo = $account => ({

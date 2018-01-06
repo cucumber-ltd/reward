@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-echo "CUCUMBER_ASSEMBLY=${CUCUMBER_ASSEMBLY}"
 if [[ ${CUCUMBER_ASSEMBLY} =~ React ]]; then
     node node_modules/.bin/cucumber-electron "$@"
 else

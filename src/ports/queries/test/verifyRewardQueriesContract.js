@@ -20,8 +20,6 @@ module.exports = function verifyContract(makeRewardQueries) {
       const rewardQueries = new RewardQueries({ rewardStore })
       const rewardProjector = new RewardProjector({ rewardStore, rewardQueries })
 
-      queries = await makeRewardQueries({ sub, rewardQueries })
-
       // Create a votes account with balance 30
       for (const gitHubIssue of [gitHubIssue1, gitHubIssue2]) {
         const accountHolderId = `id-${gitHubIssue}`
@@ -39,6 +37,8 @@ module.exports = function verifyContract(makeRewardQueries) {
           amount: 30
         })
       }
+
+      queries = await makeRewardQueries({ sub, rewardQueries })
     })
 
     it('gets AccountHolder', async () => {
