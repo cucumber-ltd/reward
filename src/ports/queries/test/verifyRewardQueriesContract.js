@@ -16,9 +16,9 @@ module.exports = function verifyContract(makeRewardQueries) {
       const pubSub = new PubSub()
       const pub = pubSub
       const sub = pubSub
-      const rewardStore = new RewardStore({ pub })
+      const rewardStore = new RewardStore()
       const rewardQueries = new RewardQueries({ rewardStore })
-      const rewardProjector = new RewardProjector({ rewardStore, rewardQueries })
+      const rewardProjector = new RewardProjector({ pub, rewardStore, rewardQueries })
 
       // Create a votes account with balance 30
       for (const gitHubIssue of [gitHubIssue1, gitHubIssue2]) {
@@ -49,6 +49,7 @@ module.exports = function verifyContract(makeRewardQueries) {
         externalIds: {
           gitHubIssue: gitHubIssue1
         },
+        gitHubOrg: 'cucumber',
         accounts: [
           {
             currency,

@@ -8,22 +8,36 @@ module.exports = class RewardApp extends React.Component {
   constructor(props) {
     super(props)
     if (!props.nextId) throw new Error('No nextId')
-    this.state = { rewards: [] }
+    if (!props.accountHolderId) throw new Error('No accountHolderId')
+    this.state = {
+      user: null,
+      rewards: []
+    }
   }
 
   componentDidMount() {
-    this._streamState()
-      .catch(err => console.error('Failed to subscribe', err.stack))
+    this._liveUpdateUser()
+      .catch(err => console.error('Failed to set up live update for user', err.stack))
+    this._liveUpdateRewards()
+      .catch(err => console.error('Failed to set up live update for rewards', err.stack))
   }
 
-  async _streamState() {
-    const rerender = async () => {
+  async _liveUpdateUser() {
+    const updater = async () => {
+      const user = await this.props.rewardQueries.getAccountHolderInfo(this.props.accountHolderId)
+      this.setState({ user })
+    }
+    await this.props.sub.subscribe(this.props.accountHolderId, updater)
+    await updater()
+  }
+
+  async _liveUpdateRewards() {
+    const updater = async () => {
       const rewards = await this.props.rewardQueries.getRewards({ gitHubOrg: 'cucumber' })
       this.setState({ rewards })
     }
-    // TODO: Subscribe to gitHubOrg
-    await this.props.sub.subscribe('gitHubOrg:cucumber', rerender)
-    await rerender()
+    await this.props.sub.subscribe('gitHubOrg:cucumber', updater)
+    await updater()
   }
 
   async _requestTransfer({ toAccountHolderId, currency, amount }) {
@@ -41,9 +55,25 @@ module.exports = class RewardApp extends React.Component {
   render() {
     return hx`
       <div>
-        ${this.state.rewards.map(reward => Reward({ reward, requestTransfer: this._requestTransfer.bind(this) }))}
+        <div>
+          ${React.createElement(User, { user: this.state.user })}
+        </div>
+        <div>
+          ${this.state.rewards.map(reward => Reward({ reward, requestTransfer: this._requestTransfer.bind(this) }))}
+        </div>
       </div>`
   }
+}
+
+const User = ({ user }) => {
+  if (!user) return null
+  return hx`
+    <div key="${user.accountHolderId}" data-account-holder-id="${user.accountHolderId}" data-type="AccountHolderInfo">
+      <h2 aria-label="GitHub User">${user.externalIds.gitHubUser}</h2>
+      <div>
+        ${user.accounts.map(account => Account({ account }))}
+      </div>
+    </div>`
 }
 
 const Reward = ({ reward, requestTransfer }) => {
@@ -53,6 +83,7 @@ const Reward = ({ reward, requestTransfer }) => {
   return hx`
     <div key="${reward.accountHolderId}" data-account-holder-id="${reward.accountHolderId}" data-type="AccountHolderInfo">
       <h2 aria-label="GitHub Issue">${reward.externalIds.gitHubIssue}</h2>
+      <h3 aria-label="GitHub Organization">${reward.gitHubOrg}</h3>
       <div>
         ${reward.accounts.map(account => Account({ account, requestTransfer: _requestTransfer }))}
       </div>

@@ -1,9 +1,10 @@
 const path = require('path')
 const { setWorldConstructor, Before, After } = require('cucumber')
 
-const assemblyPath = path.resolve(process.env.CUCUMBER_ASSEMBLY || 'features/assemblies/01-DomainTestAssembly.js')
+const assemblyRelativePath = process.env.CUCUMBER_ASSEMBLY || 'features/assemblies/01-DomainTestAssembly.js'
+const assemblyPath = path.resolve(assemblyRelativePath)
 const assemblyName = path.basename(assemblyPath, '.js')
-console.log(`🥒 ${assemblyName}`)
+console.log(`🥒 ${assemblyName} (CUCUMBER_ASSEMBLY=${assemblyRelativePath} ./cucumber)`)
 
 const AssemblyModule = require(assemblyPath)
 setWorldConstructor(AssemblyModule)

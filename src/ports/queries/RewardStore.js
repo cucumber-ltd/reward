@@ -8,15 +8,14 @@ module.exports = class RewardStore {
     this._accountHolderInfoByAccountId.set(accountHolderInfo.accountHolderId, accountHolderInfo)
   }
 
-  async linkAccountHolderInfo({ accountHolderId, gitHubOrg }) {
-    if (!this._accountHolderIdsByGitHubOrg.has(gitHubOrg)) {
-      this._accountHolderIdsByGitHubOrg.set(gitHubOrg, new Set())
-    }
-    this._accountHolderIdsByGitHubOrg.get(gitHubOrg).add(accountHolderId)
-  }
-
-  async updateAccountHolderInfo({ accountHolderInfo, transactionId }) {
+  async updateAccountHolderInfo({ accountHolderInfo }) {
     this._accountHolderInfoByAccountId.set(accountHolderInfo.accountHolderId, accountHolderInfo)
+    if (accountHolderInfo.gitHubOrg) {
+      if (!this._accountHolderIdsByGitHubOrg.has(accountHolderInfo.gitHubOrg)) {
+        this._accountHolderIdsByGitHubOrg.set(accountHolderInfo.gitHubOrg, new Set())
+      }
+      this._accountHolderIdsByGitHubOrg.get(accountHolderInfo.gitHubOrg).add(accountHolderInfo.accountHolderId)
+    }
   }
 
   async _getAccountHolderInfo(accountHolderId) {

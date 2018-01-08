@@ -10,8 +10,12 @@ module.exports = class Actor {
   }
 
   async start(pub) {
+    // PATTERN: Actor has a start method that waits for the trace's subscription to be registered.
+    // When the actor performs actions (commands) that have an observable outcome, it can use the
+    // trace's `containsSignal` method to wait for those outcomes.
+
+    // (Subscribe to null, which means all signals. We only do this in test code, the app shouldn't do this.)
     await this.trace.start()
-    // Wait for the trace's subscription to be registered. (It subscribes to null, which means all signals)
     await pub.subscriptions(null, 1)
   }
 
@@ -26,8 +30,7 @@ module.exports = class Actor {
       currency,
       amount
     })
-    // TODO: React test fails here, because RewardApp currently ignores *this* transactionId and
-    // creates its own transactionId internally, so we never see *this* transactionId in the trace
+    // PATTERN: Wait for all possible outcomes
     await Promise.race([
       this.trace.containsSignal(`failedTransactionId:${transactionId}`, 1),
       this.trace.containsSignal(transactionId, 2)

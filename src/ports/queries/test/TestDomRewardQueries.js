@@ -12,13 +12,22 @@ module.exports = class TestDomRewardQueries {
   }
 }
 
-const makeAccountHolderInfo = $accountHolder => ({
-  accountHolderId: $accountHolder.dataset.accountHolderId,
-  externalIds: {
-    gitHubIssue: $accountHolder.querySelector('[aria-label="GitHub Issue"]').textContent
-  },
-  accounts: [...$accountHolder.querySelectorAll('[data-type="AccountInfo"]')].map(makeAccountInfo)
-})
+const makeAccountHolderInfo = $accountHolder => {
+  const accountHolderInfo = {
+    accountHolderId: $accountHolder.dataset.accountHolderId,
+    externalIds: {},
+    accounts: [...$accountHolder.querySelectorAll('[data-type="AccountInfo"]')].map(makeAccountInfo)
+  }
+
+  const $gitHubIssue = $accountHolder.querySelector('[aria-label="GitHub Issue"]')
+  const $gitHubUser = $accountHolder.querySelector('[aria-label="GitHub User"]')
+  const $gitHubOrg = $accountHolder.querySelector('[aria-label="GitHub Organization"]')
+  if ($gitHubIssue) accountHolderInfo.externalIds.gitHubIssue = $gitHubIssue.textContent
+  if ($gitHubUser) accountHolderInfo.externalIds.gitHubUser = $gitHubUser.textContent
+  if ($gitHubOrg) accountHolderInfo.gitHubOrg = $gitHubOrg.textContent
+
+  return accountHolderInfo
+}
 
 const makeAccountInfo = $account => ({
   balance: parseInt($account.querySelector('[aria-label="Balance"]').textContent),
