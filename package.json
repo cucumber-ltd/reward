@@ -4,12 +4,13 @@
   "main": "server.js",
   "license": "MIT",
   "devDependencies": {
-    "cucumber": "^3.2.0",
+    "cucumber": "^3.2.1",
     "cucumber-electron": "^2.3.1",
     "electron": "^1.7.10",
     "eventsource": "^1.0.5",
     "jsdom": "^11.5.1",
-    "mocha": "^4.0.1"
+    "mocha": "^4.1.0",
+    "node-fetch": "^1.7.3"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -19,8 +20,7 @@
     "fetch-22": "^1.0.0",
     "hyperx": "^2.3.2",
     "neptunium": "^1.0.0",
-    "node-fetch": "^1.7.3",
-    "pubsub-multi": "^1.0.0",
+    "pubsub-multi": "^1.0.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "uuid": "^3.1.0",
