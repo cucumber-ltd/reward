@@ -26,7 +26,12 @@ module.exports = class Actor {
       currency,
       amount
     })
-    await this.trace.containsSignal(transactionId)
+    // TODO: React test fails here, because RewardApp currently ignores *this* transactionId and
+    // creates its own transactionId internally, so we never see *this* transactionId in the trace
+    await Promise.race([
+      this.trace.containsSignal(`failedTransactionId:${transactionId}`, 1),
+      this.trace.containsSignal(transactionId, 2)
+    ])
   }
 
   // Queries

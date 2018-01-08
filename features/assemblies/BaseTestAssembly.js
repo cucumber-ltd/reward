@@ -17,6 +17,15 @@ module.exports = class BaseTestAssembly {
     const { rewards, users, deposits, transfers } = writeAssembly
     const { rewardQueries } = readAssembly
 
+    let _nextId
+    this.nextId = () => {
+      if (!_nextId) throw new Error('No nextId')
+      const result = _nextId
+      _nextId = undefined
+      return result
+    }
+    this.setNextId = nextId => _nextId = nextId
+
     this.rewards = rewards
     this.users = users
     this.deposits = deposits

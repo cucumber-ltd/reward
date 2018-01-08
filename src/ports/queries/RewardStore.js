@@ -1,13 +1,11 @@
 module.exports = class RewardStore {
-  constructor({ pub }) {
+  constructor() {
     this._accountHolderInfoByAccountId = new Map()
     this._accountHolderIdsByGitHubOrg = new Map()
-    this._pub = pub
   }
 
   async createAccountHolderInfo({ accountHolderInfo }) {
     this._accountHolderInfoByAccountId.set(accountHolderInfo.accountHolderId, accountHolderInfo)
-    await this._pub.publish(accountHolderInfo.accountHolderId)
   }
 
   async linkAccountHolderInfo({ accountHolderId, gitHubOrg }) {
@@ -17,11 +15,8 @@ module.exports = class RewardStore {
     this._accountHolderIdsByGitHubOrg.get(gitHubOrg).add(accountHolderId)
   }
 
-  async updateAccountHolderInfo({ accountHolderInfo, transactionId, gitHubOrg }) {
+  async updateAccountHolderInfo({ accountHolderInfo, transactionId }) {
     this._accountHolderInfoByAccountId.set(accountHolderInfo.accountHolderId, accountHolderInfo)
-    await this._pub.publish(accountHolderInfo.accountHolderId)
-    if (transactionId)
-      await this._pub.publish(transactionId)
   }
 
   async _getAccountHolderInfo(accountHolderId) {

@@ -21,15 +21,16 @@ module.exports = class ReactTestAssembly extends BaseTestAssembly {
     $domNode.id = `cucumber-actor-${accountHolderId}`
     document.body.appendChild($domNode)
 
-    this.makeReactAssembly({ $domNode })
-    const { sub } = this
-    const { transfers, rewardQueries } = new DomTestAssembly({ $domNode })
+    this.makeReactAssembly({ accountHolderId, $domNode })
+    const { setNextId, sub } = this
+
+    const { transfers, rewardQueries } = new DomTestAssembly({ setNextId, $domNode })
     return new Actor({ accountHolderId, sub, transfers, rewardQueries })
   }
 
-  makeReactAssembly({ $domNode }) {
-    const { sub, transfers, rewardQueries } = this
-    return new ReactAssembly({ sub, transfers, rewardQueries, $domNode })
+  makeReactAssembly({ accountHolderId, $domNode }) {
+    const { nextId, sub, transfers, rewardQueries } = this
+    return new ReactAssembly({ nextId, sub, transfers, rewardQueries, accountHolderId, $domNode })
   }
 
   async start() {

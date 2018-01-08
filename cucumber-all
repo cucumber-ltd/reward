@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
+set -ef -o pipefail
 find features/assemblies -name "*.js" | grep --invert-match Base | sort | xargs -I{} env CUCUMBER_ASSEMBLY="{}" ./cucumber "$@"

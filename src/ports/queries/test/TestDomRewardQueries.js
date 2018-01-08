@@ -1,6 +1,5 @@
 module.exports = class TestDomRewardQueries {
   constructor({ $domNode }) {
-    if (!$domNode) throw new Error('No $domNode')
     this.$domNode = $domNode
   }
 

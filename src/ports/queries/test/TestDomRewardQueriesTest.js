@@ -1,3 +1,4 @@
+const uuid = require('uuid/v4')
 const { JSDOM } = require('jsdom')
 const ReactAssembly = require('../../../ReactAssembly')
 const TestDomRewardQueries = require('./TestDomRewardQueries')
@@ -11,8 +12,10 @@ describe('TestDomRewardQueries', () => {
     const $domNode = document.createElement('div')
     document.body.appendChild($domNode)
 
+    const nextId = uuid
+    const accountHolderId = 'bogus'
     // TODO: Add a start() method, or make this a regular function
-    new ReactAssembly({ sub, rewardQueries, $domNode })
+    new ReactAssembly({ nextId, sub, rewardQueries, accountHolderId, $domNode })
     return new TestDomRewardQueries({ $domNode })
   })
 })

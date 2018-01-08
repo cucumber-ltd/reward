@@ -4,11 +4,11 @@ const RewardQueries = require('./ports/queries/RewardQueries')
 
 module.exports = class ReadAssembly {
   constructor({ pub }) {
-    const rewardStore = new RewardStore({ pub })
+    const rewardStore = new RewardStore()
     const rewardQueries = new RewardQueries({ rewardStore })
 
     this.projectors = [
-      new RewardProjector({ rewardStore, rewardQueries })
+      new RewardProjector({ pub, rewardStore, rewardQueries })
     ]
     this.rewardQueries = rewardQueries
   }
