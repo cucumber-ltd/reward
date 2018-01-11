@@ -69,9 +69,25 @@ const User = ({ user }) => {
   if (!user) return null
   return hx`
     <div key="${user.accountHolderId}" data-account-holder-id="${user.accountHolderId}" data-type="AccountHolderInfo">
-      <h2 aria-label="GitHub User">${user.externalIds.gitHubUser}</h2>
-      <div>
-        ${user.accounts.map(account => Account({ account }))}
+      <div class="card">
+        <div class="card-content">
+          <div class="media">
+            <div class="media-left">
+              <figure class="image is-48x48">
+                <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+              </figure>
+            </div>
+            <div class="media-content">
+              <p class="title is-4" aria-label="GitHub User">${user.externalIds.gitHubUser}</p>
+            </div>
+          </div>
+      
+          <div class="content">
+            <div>
+              ${user.accounts.map(account => Account({ account }))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>`
 }
@@ -82,12 +98,29 @@ const Reward = ({ reward, requestTransfer }) => {
   }
   return hx`
     <div key="${reward.accountHolderId}" data-account-holder-id="${reward.accountHolderId}" data-type="AccountHolderInfo">
-      <h2 aria-label="GitHub Issue">${reward.externalIds.gitHubIssue}</h2>
-      <h3 aria-label="GitHub Organization">${reward.gitHubOrg}</h3>
-      <div>
-        ${reward.accounts.map(account => Account({ account, requestTransfer: _requestTransfer }))}
+      <div class="card">
+        <div class="card-content">
+          <div class="media">
+            <div class="media-left">
+              <figure class="image is-48x48">
+                <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+              </figure>
+            </div>
+            <div class="media-content">
+              <p class="title is-4" aria-label="GitHub Issue">${reward.externalIds.gitHubIssue}</p>
+              <p class="subtitle is-6" aria-label="GitHub Organization">${reward.gitHubOrg}</p>
+            </div>
+          </div>
+      
+          <div class="content">
+            <div>
+              ${reward.accounts.map(account => Account({ account, requestTransfer: _requestTransfer }))}
+            </div>
+          </div>
+        </div>
       </div>
-    </div>`
+    </div>
+    `
 }
 
 const Account = ({ account, requestTransfer }) => {
@@ -129,8 +162,14 @@ class TransferForm extends React.Component {
   render() {
     return hx`
       <form onSubmit=${this.handleSubmit}>
-        <input aria-label="Transfer Amount" type="text" value=${this.state.amount} onChange=${this.handleChange} />
-        <input aria-label="Transfer" type="submit" value="Transfer" />
+        <div class="field has-addons">
+          <div class="control">
+            <input class="input" aria-label="Transfer Amount" type="text" value=${this.state.amount} placeholder="Amount" onChange=${this.handleChange} />
+          </div>
+          <div class="control">
+            <input class="button" aria-label="Transfer" type="submit" value="Transfer" />
+          </div>
+        </div>
       </form>`
   }
 }
