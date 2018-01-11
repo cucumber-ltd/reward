@@ -6,8 +6,9 @@ require("bulma/css/bulma.css")
 const baseUrl = ''
 const fetch = window.fetch.bind(window)
 const EventSource = window.EventSource
-const { transfers, rewardQueries, sub } = new HttpAssembly({ baseUrl, fetch, EventSource })
+const { transfers, rewardQueries, publisher } = new HttpAssembly({ baseUrl, fetch, EventSource })
 
 const $domNode = document.getElementById('reward')
 const accountHolderId = 'id-aslakhellesoy'
-new ReactAssembly({ nextId: uuid, subscriber: sub, transfers, rewardQueries, accountHolderId, $domNode })
+const subscriber = publisher.makeSubscriber()
+new ReactAssembly({ nextId: uuid, subscriber, transfers, rewardQueries, accountHolderId, $domNode })
