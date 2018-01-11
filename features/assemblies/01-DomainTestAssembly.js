@@ -3,8 +3,8 @@ const Actor = require('../support/Actor')
 
 module.exports = class DomainTestAssembly extends BaseTestAssembly {
   makeActor(accountHolderId) {
-    const { sub, transfers, rewardQueries } = this
-    return new Actor({ accountHolderId, sub, transfers, rewardQueries })
+    const { publisher, transfers, rewardQueries } = this
+    return new Actor({ accountHolderId, publisher, transfers, rewardQueries })
   }
 
   async start() {

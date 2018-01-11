@@ -1,7 +1,7 @@
 module.exports = class RewardProjector {
-  constructor({ pub, rewardStore, rewardQueries }) {
-    if (!pub) throw new Error('No pub')
-    this._pub = pub
+  constructor({ publisher, rewardStore, rewardQueries }) {
+    if (!publisher) throw new Error('No pub')
+    this._publisher = publisher
     this._rewardStore = rewardStore
     this._rewardQueries = rewardQueries
   }
@@ -68,18 +68,18 @@ module.exports = class RewardProjector {
   }
 
   async _publishSignal({ accountHolderInfo, transactionId, failedTransactionId }) {
-    await this._pub.publish(accountHolderInfo.accountHolderId)
+    await this._publisher.publish(accountHolderInfo.accountHolderId)
 
     if(accountHolderInfo.gitHubOrg)
-      await this._pub.publish(`gitHubOrg:${accountHolderInfo.gitHubOrg}`)
+      await this._publisher.publish(`gitHubOrg:${accountHolderInfo.gitHubOrg}`)
     if (transactionId)
-      await this._pub.publish(transactionId)
+      await this._publisher.publish(transactionId)
     if (failedTransactionId)
-      await this._pub.publish(`failedTransactionId:${failedTransactionId}`)
+      await this._publisher.publish(`failedTransactionId:${failedTransactionId}`)
 
     for(const idType in accountHolderInfo.externalIds) {
       const externalId = accountHolderInfo.externalIds[idType]
-      await this._pub.publish(`${idType}:${externalId}`)
+      await this._publisher.publish(`${idType}:${externalId}`)
     }
   }
 }

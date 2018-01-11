@@ -1,5 +1,5 @@
 const assert = require('assert')
-const { PubSub } = require('pubsub-multi')
+const { MemoryPublisher } = require('pubsub-multi')
 const RewardStore = require('../RewardStore')
 const RewardQueries = require('../RewardQueries')
 const RewardProjector = require('../RewardProjector')
@@ -13,12 +13,10 @@ module.exports = function verifyContract(makeRewardQueries) {
 
     let queries
     beforeEach(async () => {
-      const pubSub = new PubSub()
-      const pub = pubSub
-      const sub = pubSub
+      const publisher = new MemoryPublisher()
       const rewardStore = new RewardStore()
       const rewardQueries = new RewardQueries({ rewardStore })
-      const rewardProjector = new RewardProjector({ pub, rewardStore, rewardQueries })
+      const rewardProjector = new RewardProjector({ publisher, rewardStore, rewardQueries })
 
       // Create a votes account with balance 30
       for (const gitHubIssue of [gitHubIssue1, gitHubIssue2]) {
@@ -38,7 +36,8 @@ module.exports = function verifyContract(makeRewardQueries) {
         })
       }
 
-      queries = await makeRewardQueries({ sub, rewardQueries })
+      const subscriber = publisher.makeSubscriber('subscriber-id')
+      queries = await makeRewardQueries({ subscriber, rewardQueries })
     })
 
     it('gets AccountHolder', async () => {

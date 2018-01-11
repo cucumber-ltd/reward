@@ -1,5 +1,5 @@
-const verifyContract = require('./verifyRewardQueriesContract')
+const verifyRewardQueriesContract = require('./verifyRewardQueriesContract')
 
 describe('RewardQueries', () => {
-  verifyContract(async ({ rewardQueries }) => rewardQueries)
+  verifyRewardQueriesContract(async ({ rewardQueries }) => rewardQueries)
 })

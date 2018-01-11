@@ -1,5 +1,5 @@
 const uuid = require('uuid/v4')
-const { PubSub } = require('pubsub-multi')
+const { MemoryPublisher } = require('pubsub-multi')
 const { MemoryEventStore } = require('neptunium')
 const CQRSAssembly = require('../../src/CQRSAssembly')
 
@@ -9,11 +9,9 @@ module.exports = class BaseTestAssembly {
     this._actors = new Map()
 
     const eventStore = new MemoryEventStore()
-    const pubSub = new PubSub()
-    const pub = pubSub
-    const sub = pubSub
+    const publisher = new MemoryPublisher()
 
-    const { readAssembly, writeAssembly } = new CQRSAssembly({ eventStore, pub })
+    const { readAssembly, writeAssembly } = new CQRSAssembly({ eventStore, publisher })
     const { rewards, users, deposits, transfers } = writeAssembly
     const { rewardQueries } = readAssembly
 
@@ -31,19 +29,19 @@ module.exports = class BaseTestAssembly {
     this.deposits = deposits
     this.transfers = transfers
     this.rewardQueries = rewardQueries
-    this.pub = pub
-    this.sub = sub
+    this.publisher = publisher
   }
 
   async actor(accountHolderId) {
     if (!this._actors.has(accountHolderId)) {
       const actor = this.makeActor(accountHolderId)
-      await actor.start(this.pub)
+      await actor.start(this.publisher)
       this._actors.set(accountHolderId, actor)
     }
     return this._actors.get(accountHolderId)
   }
 
+  // PATTERN: Map names to entityIds
   id(name) {
     if (!name) return null
     if (!this._ids.has(name))

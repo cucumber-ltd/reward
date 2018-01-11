@@ -1,15 +1,23 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const { asyncRouter, respond, WebServer } = require('express-extensions')
-const { subRouter } = require('pubsub-multi')
+const { pubSubRouter } = require('pubsub-multi')
 
 module.exports = class ServerAssembly {
-  constructor({ transfers, rewardQueries, sub }) {
+  constructor({ transfers, rewardQueries, publisher }) {
+    if (!publisher) throw new Error('No publisher')
     const app = express()
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Using WebPack Dev Middleware')
+      const webpackMiddleware = require('./webpack/webpackMiddleware')
+      app.use(webpackMiddleware())
+    }
+
     app.use(express.static('./public'))
     app.use(bodyParser.json())
     app.use(bodyParser.text())
-    app.use(subRouter({ sub }))
+    app.use(pubSubRouter({ publisher }))
 
     const router = asyncRouter()
 

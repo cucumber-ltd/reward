@@ -27,7 +27,7 @@ module.exports = class RewardApp extends React.Component {
       const user = await this.props.rewardQueries.getAccountHolderInfo(this.props.accountHolderId)
       this.setState({ user })
     }
-    await this.props.sub.subscribe(this.props.accountHolderId, updater)
+    await this.props.subscriber.subscribe(this.props.accountHolderId, updater)
     await updater()
   }
 
@@ -36,7 +36,7 @@ module.exports = class RewardApp extends React.Component {
       const rewards = await this.props.rewardQueries.getRewards({ gitHubOrg: 'cucumber' })
       this.setState({ rewards })
     }
-    await this.props.sub.subscribe('gitHubOrg:cucumber', updater)
+    await this.props.subscriber.subscribe('gitHubOrg:cucumber', updater)
     await updater()
   }
 

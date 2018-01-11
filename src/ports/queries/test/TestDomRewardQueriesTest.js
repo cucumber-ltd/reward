@@ -2,10 +2,10 @@ const uuid = require('uuid/v4')
 const { JSDOM } = require('jsdom')
 const ReactAssembly = require('../../../ReactAssembly')
 const TestDomRewardQueries = require('./TestDomRewardQueries')
-const verifyContract = require('./verifyRewardQueriesContract')
+const verifyRewardQueriesContract = require('./verifyRewardQueriesContract')
 
 describe('TestDomRewardQueries', () => {
-  verifyContract(async ({ sub, rewardQueries }) => {
+  verifyRewardQueriesContract(async ({ subscriber, rewardQueries }) => {
     const dom = new JSDOM(`<!DOCTYPE html>`)
     const document = dom.window.document
     global.document = document
@@ -15,7 +15,7 @@ describe('TestDomRewardQueries', () => {
     const nextId = uuid
     const accountHolderId = 'bogus'
     // TODO: Add a start() method, or make this a regular function
-    new ReactAssembly({ nextId, sub, rewardQueries, accountHolderId, $domNode })
+    new ReactAssembly({ nextId, subscriber, rewardQueries, accountHolderId, $domNode })
     return new TestDomRewardQueries({ $domNode })
   })
 })
