@@ -13,6 +13,9 @@ module.exports = class TransferSaga {
   }
 
   async onTransferRequested({ entityId: transactionId, fromAccountHolderId, toAccountHolderId, currency, amount }) {
+    // TODO: Removing this line doesn't cause any tests to fail.
+    // However, it is needed to handle concurrently running transactions.
+    // We need a unit test for this!
     if (this._transactionId) return
     this._transactionId = transactionId
     this._toAccountHolderId = toAccountHolderId
