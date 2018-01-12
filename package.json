@@ -23,7 +23,7 @@
     "express-extensions": "^1.0.0",
     "fetch-22": "^1.0.0",
     "hyperx": "^2.3.2",
-    "neptunium": "^1.0.0",
+    "neptunium": "^1.1.0",
     "pubsub-multi": "^1.1.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

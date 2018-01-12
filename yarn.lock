@@ -2383,9 +2383,9 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
-neptunium@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/neptunium/-/neptunium-1.0.0.tgz#9070ac8cbfe989c46fdea06bb0baee54b0ce5a0d"
+neptunium@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/neptunium/-/neptunium-1.1.0.tgz#b84e9f205f6fdd79313ab7fadeeae9ddfc6ca588"
   dependencies:
     value-object "^0.0.10"
 

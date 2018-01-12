@@ -13,14 +13,25 @@ module.exports = class TransferSaga {
   }
 
   async onTransferRequested({ entityId: transactionId, fromAccountHolderId, toAccountHolderId, currency, amount }) {
+    if (this._transactionId) return
     this._transactionId = transactionId
     this._toAccountHolderId = toAccountHolderId
-    await this._commandBus.dispatchCommand(new Withdraw({ accountHolderId: fromAccountHolderId, transactionId, currency, amount }))
+    await this._commandBus.dispatchCommand(new Withdraw({
+      accountHolderId: fromAccountHolderId,
+      transactionId,
+      currency,
+      amount
+    }))
   }
 
   async onAccountDebited({ transactionId, currency, amount }) {
     if (transactionId !== this._transactionId) return
-    await this._commandBus.dispatchCommand(new Deposit({ accountHolderId: this._toAccountHolderId, transactionId, currency, amount }))
+    await this._commandBus.dispatchCommand(new Deposit({
+      accountHolderId: this._toAccountHolderId,
+      transactionId,
+      currency,
+      amount
+    }))
   }
 
   async onAccountCredited({ transactionId }) {
