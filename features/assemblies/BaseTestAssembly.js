@@ -12,7 +12,7 @@ module.exports = class BaseTestAssembly {
     const publisher = new MemoryPublisher()
 
     const { readAssembly, writeAssembly } = new CQRSAssembly({ eventStore, publisher })
-    const { rewards, users, deposits, transfers } = writeAssembly
+    const { rewards, users, accountHolders, transfers } = writeAssembly
     const { rewardQueries } = readAssembly
 
     let _nextId
@@ -26,7 +26,7 @@ module.exports = class BaseTestAssembly {
 
     this.rewards = rewards
     this.users = users
-    this.deposits = deposits
+    this.accountHolders = accountHolders
     this.transfers = transfers
     this.rewardQueries = rewardQueries
     this.publisher = publisher

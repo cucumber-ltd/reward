@@ -2,7 +2,7 @@ const { buildCommandBus } = require('neptunium')
 
 const DomainRewards = require('./ports/rewards/DomainRewards')
 const DomainUsers = require('./ports/users/DomainUsers')
-const DomainDeposits = require('./ports/deposits/DomainDeposits')
+const DomainAccountHolders = require('./ports/accountHolders/DomainAccountHolders')
 const DomainTransfers = require('./ports/transfers/DomainTransfers')
 const TransferSaga = require('./aggregates/transfers/TransferSaga')
 
@@ -15,7 +15,7 @@ module.exports = class WriteAssembly {
 
     this.rewards = new DomainRewards({ commandBus })
     this.users = new DomainUsers({ commandBus })
-    this.deposits = new DomainDeposits({ commandBus })
+    this.accountHolders = new DomainAccountHolders({ commandBus })
     this.transfers = new DomainTransfers({ commandBus })
   }
 }
